@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Navbar } from "@/components/Navbar";
+import { Shell } from "@/components/Shell";
 import { ToastProvider } from "@/components/Toast";
 import { ConfirmProvider } from "@/components/ConfirmDialog";
 import "./globals.css";
@@ -31,16 +31,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           fillers, etc.) inject attributes onto <html>/<body> before React
           hydrates, which React otherwise flags as a mismatch even though
           nothing is actually wrong with the render. */}
-      <body suppressHydrationWarning className="min-h-full flex flex-col bg-zinc-50 dark:bg-black">
+      <body suppressHydrationWarning className="min-h-full bg-zinc-50 dark:bg-black">
         <ToastProvider>
           <ConfirmProvider>
-            <Navbar />
-            <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-8 sm:px-6">
-              {children}
-            </main>
-            <footer className="border-t border-zinc-200 py-6 text-center text-xs text-zinc-400 dark:border-zinc-800 dark:text-zinc-500">
-              Built for AITM Coding Club Screening — Track 2
-            </footer>
+            <Shell>{children}</Shell>
           </ConfirmProvider>
         </ToastProvider>
       </body>

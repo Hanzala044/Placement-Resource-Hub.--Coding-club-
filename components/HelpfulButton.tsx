@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { ThumbsUpIcon } from "@/components/icons";
 import { useToast } from "@/components/Toast";
 
@@ -22,15 +22,26 @@ function markVoted(id: string) {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify([...ids]));
 }
 
+// localStorage never changes from outside this tab in a way we need to
+// react to, so the "subscribe" half of useSyncExternalStore is a no-op —
+// we only need its snapshot half to read the value safely on the client
+// while matching the server's (storage-less) render during hydration.
+function subscribeNoop() {
+  return () => {};
+}
+
 export function HelpfulButton({ experienceId, initialCount }: { experienceId: string; initialCount: number }) {
   const { show } = useToast();
   const [count, setCount] = useState(initialCount);
-  const [voted, setVoted] = useState(false);
+  const [justVoted, setJustVoted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setVoted(getVotedIds().has(experienceId));
-  }, [experienceId]);
+  const previouslyVoted = useSyncExternalStore(
+    subscribeNoop,
+    () => getVotedIds().has(experienceId),
+    () => false // server snapshot: no localStorage during SSR
+  );
+  const voted = previouslyVoted || justVoted;
 
   async function vote() {
     if (voted || loading) return;
@@ -40,7 +51,7 @@ export function HelpfulButton({ experienceId, initialCount }: { experienceId: st
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "Failed to record vote");
       setCount(data.helpful_count);
-      setVoted(true);
+      setJustVoted(true);
       markVoted(experienceId);
       show("Thanks for the feedback!", "success");
     } catch (e) {

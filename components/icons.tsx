@@ -180,6 +180,24 @@ export function PlusIcon(props: IconProps) {
   );
 }
 
+export function HomeIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="m3 11 9-8 9 8" />
+      <path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10" />
+    </svg>
+  );
+}
+
+export function TrendingUpIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="m3 17 6-6 4 4 8-8" />
+      <path d="M17 7h4v4" />
+    </svg>
+  );
+}
+
 export function ArrowUpDownIcon(props: IconProps) {
   return (
     <svg {...base} {...props}>

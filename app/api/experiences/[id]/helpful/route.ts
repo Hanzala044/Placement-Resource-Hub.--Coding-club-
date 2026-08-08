@@ -25,7 +25,16 @@ export async function POST(_req: NextRequest, { params }: Ctx) {
     .select("helpful_count")
     .eq("id", id)
     .maybeSingle();
-  if (findError) return errorResponse(findError.message, 500);
+  if (findError) {
+    // Most likely cause: this DB was created before helpful_count existed.
+    if (findError.message.includes("helpful_count")) {
+      return errorResponse(
+        "The database is missing the helpful_count column. Run sql/migrations/002_add_helpful_count.sql in the Supabase SQL editor, then try again.",
+        500
+      );
+    }
+    return errorResponse(findError.message, 500);
+  }
   if (!current) return errorResponse("Experience not found", 404);
 
   const nextCount = (current.helpful_count ?? 0) + 1;
