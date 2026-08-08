@@ -28,7 +28,7 @@ export default async function EditExperiencePage({ params }: PageProps) {
         <span className={`flex size-10 items-center justify-center rounded-xl ${surface} text-indigo-600 dark:text-indigo-400`}>
           <PencilIcon width={18} height={18} />
         </span>
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Edit experience</h1>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">Edit experience</h1>
       </div>
       <ExperienceForm mode="edit" experience={experience as Experience} />
     </div>

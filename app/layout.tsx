@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Shell } from "@/components/Shell";
 import { ToastProvider } from "@/components/Toast";
 import { ConfirmProvider } from "@/components/ConfirmDialog";
+import { ClerkProvider } from '@clerk/nextjs';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -41,11 +42,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           nothing is actually wrong with the render. It also covers the
           data-theme attribute the script above sets pre-hydration. */}
       <body suppressHydrationWarning className="min-h-full">
-        <ToastProvider>
-          <ConfirmProvider>
-            <Shell>{children}</Shell>
-          </ConfirmProvider>
-        </ToastProvider>
+        <ClerkProvider>
+          <ToastProvider>
+            <ConfirmProvider>
+              <Shell>{children}</Shell>
+            </ConfirmProvider>
+          </ToastProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

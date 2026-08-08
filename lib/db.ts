@@ -11,6 +11,12 @@ export function zodErrorResponse(error: ZodError) {
   return errorResponse("Validation failed", 422, error.flatten().fieldErrors);
 }
 
+/** Splits a comma-separated query param (e.g. `?difficulty=easy,medium`)
+ *  into a clean string[] — used by the multi-select filter bar. */
+export function parseMulti(value: string | null): string[] {
+  return value ? value.split(",").map((v) => v.trim()).filter(Boolean) : [];
+}
+
 /** Maps the `sort` query param to an `.order()` call for experiences. */
 export function experienceSort(sort: string | null): { column: "created_at" | "helpful_count"; ascending: boolean } {
   if (sort === "oldest") return { column: "created_at", ascending: true };

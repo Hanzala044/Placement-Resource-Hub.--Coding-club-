@@ -1,41 +1,38 @@
 import "server-only";
-import { GoogleGenAI } from "@google/genai";
+import OpenAI from "openai";
 import type { AiSummary } from "./types";
 
-let client: GoogleGenAI | null = null;
+let client: OpenAI | null = null;
 
-function getClient(): GoogleGenAI {
+function getClient(): OpenAI {
   if (client) return client;
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     throw new Error(
-      "GEMINI_API_KEY is not set. Add it to .env.local to use the AI summary feature."
+      "OPENROUTER_API_KEY is not set. Add it to .env.local to use the AI features."
     );
   }
-  client = new GoogleGenAI({ apiKey });
+  client = new OpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey: apiKey,
+  });
   return client;
 }
 
-/** Turns the SDK's raw (often a giant nested-JSON-in-a-string) error into
- *  one sentence a user can act on, instead of dumping the whole payload. */
-function friendlyGeminiError(e: unknown): string {
+function friendlyAiError(e: unknown): string {
   const raw = e instanceof Error ? e.message : String(e);
-  if (raw.includes("RESOURCE_EXHAUSTED") || raw.includes('"code":429')) {
-    return "Gemini's free-tier quota for this API key is exhausted (0 requests/day allotted). Generate a fresh key at aistudio.google.com/apikey on a personal Google account, or check billing/quota on the linked Cloud project.";
+  if (raw.includes("401") || raw.includes("invalid_api_key")) {
+    return "OpenRouter rejected the API key — double-check OPENROUTER_API_KEY in .env.local.";
   }
-  if (raw.includes("API_KEY_INVALID") || raw.includes('"code":400')) {
-    return "Gemini rejected the API key — double-check GEMINI_API_KEY in .env.local.";
+  if (raw.includes("402") || raw.includes("insufficient_quota")) {
+    return "OpenRouter credits exhausted. Check your billing at openrouter.ai.";
   }
-  if (raw.includes("PERMISSION_DENIED") || raw.includes('"code":403')) {
-    return "Gemini denied this API key permission to call generateContent — check the key's API restrictions in Google Cloud Console.";
-  }
-  return `Gemini request failed: ${raw.slice(0, 300)}`;
+  return `AI request failed: ${raw.slice(0, 300)}`;
 }
 
 /**
- * Bonus AI feature: summarize an interview experience write-up into a
- * 2-3 sentence TL;DR plus 3-5 suggested topic tags. Asks Gemini for strict
- * JSON so the caller doesn't have to guess at a string-splitting format.
+ * Summarize an interview experience write-up into a 2-3 sentence TL;DR 
+ * plus 3-5 suggested topic tags.
  */
 export async function generateExperienceSummary(content: string): Promise<AiSummary> {
   const ai = getClient();
@@ -51,16 +48,16 @@ ${content}
 
   let response;
   try {
-    response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
-      contents: prompt,
-      config: { responseMimeType: "application/json" },
+    response = await ai.chat.completions.create({
+      model: "google/gemma-4-31b-it:free", // Good free/cheap model on OpenRouter, or you can use "meta-llama/llama-3-8b-instruct:free"
+      messages: [{ role: "user", content: prompt }],
+      response_format: { type: "json_object" },
     });
   } catch (e) {
-    throw new Error(friendlyGeminiError(e));
+    throw new Error(friendlyAiError(e));
   }
 
-  const raw = response.text ?? "";
+  const raw = response.choices[0]?.message?.content ?? "";
 
   try {
     const parsed = JSON.parse(raw);
@@ -71,8 +68,73 @@ ${content}
     if (!summary) throw new Error("empty summary");
     return { summary, tags };
   } catch {
-    // Model didn't return clean JSON — fall back to showing the raw text
-    // rather than failing the request outright.
     return { summary: raw.trim() || "AI did not return a usable summary.", tags: [] };
+  }
+}
+
+/**
+ * Generates a 5-question multiple choice quiz on the requested topic.
+ */
+export async function generateQuiz(topic: string) {
+  const ai = getClient();
+
+  const prompt = `You are a technical interviewer for placement preparation.
+Generate a 5-question multiple-choice quiz about "${topic}".
+Make the difficulty medium-hard, focusing on practical knowledge.
+Respond with ONLY minified JSON (no markdown fences) exactly matching this shape:
+{"questions": [{"question": string, "options": [string, string, string, string], "correctIndex": number (0-3)}]}
+`;
+
+  let response;
+  try {
+    response = await ai.chat.completions.create({
+      model: "google/gemma-4-31b-it:free", 
+      messages: [{ role: "user", content: prompt }],
+      response_format: { type: "json_object" },
+    });
+  } catch (e) {
+    throw new Error(friendlyAiError(e));
+  }
+
+  const raw = response.choices[0]?.message?.content ?? "";
+
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed.questions || !Array.isArray(parsed.questions)) {
+      throw new Error("Invalid format");
+    }
+    return parsed.questions;
+  } catch {
+    throw new Error("AI failed to generate a valid quiz. Try again.");
+  }
+}
+
+/**
+ * Acts as an AI interviewer for a mock interview simulation.
+ */
+export async function simulateInterview(messages: { role: string; content: string }[], context: string) {
+  const ai = getClient();
+  const systemInstruction = `You are a strict but fair technical interviewer for a top tier tech company.
+The context of the interview is: ${context}.
+Ask ONE question at a time. Do not give the user the answer right away.
+Critique their previous answer if they provided one, then ask the next question.
+Keep your responses concise and conversational (max 3-4 sentences).`;
+
+  const formattedMessages: { role: "user" | "assistant" | "system", content: string }[] = messages.map(m => ({
+    role: m.role === "user" ? "user" : "assistant",
+    content: m.content
+  }));
+
+  try {
+    const response = await ai.chat.completions.create({
+      model: "google/gemma-4-31b-it:free",
+      messages: [
+        { role: "system", content: systemInstruction },
+        ...formattedMessages
+      ],
+    });
+    return response.choices[0]?.message?.content || "";
+  } catch (e) {
+    throw new Error(friendlyAiError(e));
   }
 }

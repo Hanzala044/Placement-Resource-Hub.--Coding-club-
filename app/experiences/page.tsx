@@ -6,7 +6,7 @@ import { ExperienceCard } from "@/components/ExperienceCard";
 import { EmptyState } from "@/components/EmptyState";
 import { PlusIcon, FileTextIcon } from "@/components/icons";
 import { button, surface } from "@/lib/ui";
-import { experienceSort } from "@/lib/db";
+import { experienceSort, parseMulti } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -22,10 +22,10 @@ export default async function ExperiencesPage({ searchParams }: PageProps) {
   };
 
   const status = get("status") ?? "open";
-  const company = get("company");
-  const difficulty = get("difficulty");
-  const outcome = get("outcome");
-  const level = get("level");
+  const company = parseMulti(get("company") ?? null);
+  const difficulty = parseMulti(get("difficulty") ?? null);
+  const outcome = parseMulti(get("outcome") ?? null);
+  const level = parseMulti(get("level") ?? null);
   const tag = get("tag");
   const search = get("search");
   const { column, ascending } = experienceSort(get("sort") ?? null);
@@ -37,10 +37,10 @@ export default async function ExperiencesPage({ searchParams }: PageProps) {
     .limit(100);
 
   if (status !== "all") query = query.eq("status", status);
-  if (company) query = query.eq("company_id", company);
-  if (difficulty) query = query.eq("difficulty", difficulty);
-  if (outcome) query = query.eq("outcome", outcome);
-  if (level) query = query.eq("experience_level", level);
+  if (company.length > 0) query = query.in("company_id", company);
+  if (difficulty.length > 0) query = query.in("difficulty", difficulty);
+  if (outcome.length > 0) query = query.in("outcome", outcome);
+  if (level.length > 0) query = query.in("experience_level", level);
   if (tag) query = query.contains("tags", [tag]);
   if (search) {
     const like = `%${search}%`;
@@ -60,8 +60,8 @@ export default async function ExperiencesPage({ searchParams }: PageProps) {
             <FileTextIcon width={20} height={20} />
           </span>
           <div>
-            <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Interview Experiences</h1>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <h1 className="text-2xl font-bold text-[var(--text-primary)]">Interview Experiences</h1>
+            <p className="text-sm text-[var(--text-secondary)]">
               {experiences?.length ?? 0} result{experiences?.length === 1 ? "" : "s"}
             </p>
           </div>

@@ -13,7 +13,7 @@ export function RecentExperiencesTable({ experiences, totalCount }: { experience
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-zinc-100 text-xs uppercase tracking-wide text-zinc-400 dark:border-zinc-800 dark:text-zinc-500">
+            <tr className="border-b border-[var(--border-default)] text-xs uppercase tracking-wide text-[var(--text-secondary)]">
               <th className="px-4 py-3 font-medium">Role</th>
               <th className="px-4 py-3 font-medium">Company</th>
               <th className="px-4 py-3 font-medium">Difficulty</th>
@@ -26,17 +26,17 @@ export function RecentExperiencesTable({ experiences, totalCount }: { experience
             {experiences.map((exp) => (
               <tr
                 key={exp.id}
-                className="border-b border-zinc-50 transition-colors last:border-0 hover:bg-zinc-50 dark:border-zinc-800/60 dark:hover:bg-zinc-800/40"
+                className="border-b border-[var(--border-default)] transition-colors last:border-0 hover:bg-[var(--surface-muted)]"
               >
-                <td className="px-4 py-3 font-medium text-zinc-900 dark:text-zinc-100">{exp.role}</td>
-                <td className="px-4 py-3 text-zinc-500 dark:text-zinc-400">{exp.companies?.name ?? "—"}</td>
+                <td className="px-4 py-3 font-medium text-[var(--text-primary)]">{exp.role}</td>
+                <td className="px-4 py-3 text-[var(--text-secondary)]">{exp.companies?.name ?? "—"}</td>
                 <td className="px-4 py-3">
                   <DifficultyBadge value={exp.difficulty} />
                 </td>
                 <td className="px-4 py-3">
                   <OutcomeBadge value={exp.outcome} />
                 </td>
-                <td className="px-4 py-3 tabular-nums text-zinc-500 dark:text-zinc-400">{formatDate(exp.created_at)}</td>
+                <td className="px-4 py-3 tabular-nums text-[var(--text-secondary)]">{formatDate(exp.created_at)}</td>
                 <td className="px-4 py-3 text-right">
                   <Link
                     href={`/experience/${exp.id}`}
@@ -50,7 +50,7 @@ export function RecentExperiencesTable({ experiences, totalCount }: { experience
           </tbody>
         </table>
       </div>
-      <div className="flex items-center justify-between border-t border-zinc-100 px-4 py-2.5 text-xs text-zinc-400 dark:border-zinc-800 dark:text-zinc-500">
+      <div className="flex items-center justify-between border-t border-[var(--border-default)] px-4 py-2.5 text-xs text-[var(--text-secondary)]">
         <span>
           Showing {experiences.length} of {totalCount}
         </span>

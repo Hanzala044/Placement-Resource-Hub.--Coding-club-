@@ -1,10 +1,10 @@
 export function Skeleton({ className = "" }: { className?: string }) {
-  return <div className={`animate-pulse-bg rounded-md bg-zinc-200 dark:bg-zinc-800 ${className}`} />;
+  return <div className={`animate-pulse-bg rounded-md bg-[var(--surface-muted)] ${className}`} />;
 }
 
 export function CardSkeleton() {
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="flex flex-col gap-3 rounded-2xl border border-[var(--border-default)] bg-[var(--surface-card)] p-4">
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 space-y-2">
           <Skeleton className="h-4 w-2/3" />

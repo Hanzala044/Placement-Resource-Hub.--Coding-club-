@@ -10,8 +10,8 @@ export function ExperienceCard({ experience }: { experience: Experience }) {
     <Link href={`/experience/${experience.id}`} className={`flex flex-col gap-3 p-4 ${cardHover}`}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
-          <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">{experience.role}</h3>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <h3 className="font-semibold text-[var(--text-primary)]">{experience.role}</h3>
+          <p className="text-sm text-[var(--text-secondary)]">
             {experience.companies?.name ?? "Unknown company"}
           </p>
         </div>
@@ -23,7 +23,7 @@ export function ExperienceCard({ experience }: { experience: Experience }) {
         </div>
       </div>
 
-      <p className="text-sm text-zinc-600 dark:text-zinc-300">{truncate(experience.content, 200)}</p>
+      <p className="text-sm text-[var(--text-secondary)]">{truncate(experience.content, 200)}</p>
 
       {experience.tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
@@ -33,7 +33,7 @@ export function ExperienceCard({ experience }: { experience: Experience }) {
         </div>
       )}
 
-      <div className="mt-auto flex items-center justify-between border-t border-zinc-100 pt-3 text-xs text-zinc-400 dark:border-zinc-800 dark:text-zinc-500">
+      <div className="mt-auto flex items-center justify-between border-t border-[var(--border-default)] pt-3 text-xs text-[var(--text-secondary)]">
         <span>{experience.author_name || "Anonymous"} · {formatDate(experience.created_at)}</span>
         <div className="flex items-center gap-3">
           <span className="flex items-center gap-1" title="Estimated reading time">

@@ -20,14 +20,14 @@ export function CompanyCard({ id, name, industry, experienceCount, resourceCount
         <ArrowRightIcon
           width={16}
           height={16}
-          className="text-zinc-300 transition-all group-hover:translate-x-0.5 group-hover:text-indigo-500 dark:text-zinc-700"
+          className="text-[var(--text-secondary)] opacity-40 transition-all group-hover:translate-x-0.5 group-hover:text-indigo-500 group-hover:opacity-100"
         />
       </div>
       <div>
-        <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">{name}</h3>
-        {industry && <p className="text-sm text-zinc-500 dark:text-zinc-400">{industry}</p>}
+        <h3 className="font-semibold text-[var(--text-primary)]">{name}</h3>
+        {industry && <p className="text-sm text-[var(--text-secondary)]">{industry}</p>}
       </div>
-      <div className="mt-auto flex gap-3 pt-2 text-xs text-zinc-500 dark:text-zinc-400">
+      <div className="mt-auto flex gap-3 pt-2 text-xs text-[var(--text-secondary)]">
         <span>{experienceCount} experience{experienceCount === 1 ? "" : "s"}</span>
         <span>·</span>
         <span>{resourceCount} resource{resourceCount === 1 ? "" : "s"}</span>

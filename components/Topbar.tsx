@@ -6,12 +6,14 @@ import { MenuIcon, SearchIcon, PlusIcon, ChevronDownIcon, FileTextIcon, LinkIcon
 import { input } from "@/lib/ui";
 import { useRouter } from "next/navigation";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 
 export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [quickAddOpen, setQuickAddOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { isSignedIn, isLoaded } = useUser();
 
   useEffect(() => {
     function onClick(e: MouseEvent) {
@@ -76,6 +78,19 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
               Add resource
             </Link>
           </div>
+        )}
+      </div>
+
+      <div className="flex items-center">
+        {isLoaded && !isSignedIn && (
+          <SignInButton mode="modal">
+            <button className="rounded-lg border border-[var(--border-default)] px-3 py-1.5 text-sm font-medium text-[var(--text-primary)] hover:bg-zinc-50 dark:hover:bg-zinc-800">
+              Sign In
+            </button>
+          </SignInButton>
+        )}
+        {isLoaded && isSignedIn && (
+          <UserButton afterSignOutUrl="/" />
         )}
       </div>
     </header>

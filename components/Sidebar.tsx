@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/Logo";
+import { useUser } from "@clerk/nextjs";
 import { HomeIcon, FileTextIcon, LinkIcon, PlusIcon, SparklesIcon, XIcon } from "@/components/icons";
 
 const mainLinks = [
@@ -14,6 +15,15 @@ const mainLinks = [
 const contributeLinks = [
   { href: "/submit-experience", label: "Share Experience", icon: PlusIcon },
   { href: "/submit-resource", label: "Add Resource", icon: PlusIcon },
+];
+
+const advancedLinks = [
+  { href: "/quiz", label: "Take a Quiz", icon: SparklesIcon },
+  { href: "/interview-simulator", label: "Mock Interview", icon: SparklesIcon },
+];
+
+const personalLinks = [
+  { href: "/my-dashboard", label: "My Dashboard", icon: HomeIcon },
 ];
 
 function NavSection({
@@ -56,6 +66,7 @@ function NavSection({
 
 export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const pathname = usePathname();
+  const { isSignedIn } = useUser();
 
   return (
     <>
@@ -80,6 +91,11 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
         <nav className="flex flex-1 flex-col gap-6 overflow-y-auto px-3 py-2">
           <NavSection title="Main" links={mainLinks} pathname={pathname} onNavigate={onClose} />
           <NavSection title="Contribute" links={contributeLinks} pathname={pathname} onNavigate={onClose} />
+          <NavSection title="Advanced Tools" links={advancedLinks} pathname={pathname} onNavigate={onClose} />
+          
+          {isSignedIn && (
+            <NavSection title="Personal" links={personalLinks} pathname={pathname} onNavigate={onClose} />
+          )}
         </nav>
 
         <div className="m-3 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 p-4 text-white">

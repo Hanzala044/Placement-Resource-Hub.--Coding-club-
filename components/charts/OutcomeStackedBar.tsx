@@ -30,7 +30,7 @@ export function OutcomeStackedBar({ selected, pending, rejected }: { selected: n
   ];
 
   if (total === 0) {
-    return <p className="text-sm text-zinc-400 dark:text-zinc-500">No outcomes recorded yet.</p>;
+    return <p className="text-sm text-[var(--text-secondary)]">No outcomes recorded yet.</p>;
   }
 
   return (
@@ -57,9 +57,9 @@ export function OutcomeStackedBar({ selected, pending, rejected }: { selected: n
               aria-label={`${s.label}: ${s.value} (${pct.toFixed(0)}%)`}
             >
               {hovered === s.key && (
-                <div className="pointer-events-none absolute -top-9 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-lg border border-zinc-200 bg-white px-2 py-1 text-xs shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
-                  <span className="font-semibold text-zinc-900 dark:text-zinc-50">{s.value}</span>{" "}
-                  <span className="text-zinc-500 dark:text-zinc-400">{s.label} · {pct.toFixed(0)}%</span>
+                <div className="pointer-events-none absolute -top-9 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-lg border border-[var(--border-default)] bg-[var(--surface-card)] px-2 py-1 text-xs shadow-lg">
+                  <span className="font-semibold text-[var(--text-primary)]">{s.value}</span>{" "}
+                  <span className="text-[var(--text-secondary)]">{s.label} · {pct.toFixed(0)}%</span>
                 </div>
               )}
             </button>
@@ -69,9 +69,9 @@ export function OutcomeStackedBar({ selected, pending, rejected }: { selected: n
 
       <div className="flex flex-wrap gap-4 text-xs">
         {segments.map((s) => (
-          <span key={s.key} className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400">
+          <span key={s.key} className="flex items-center gap-1.5 text-[var(--text-secondary)]">
             <s.icon width={13} height={13} style={{ color: s.color }} />
-            {s.label} <span className="font-medium text-zinc-900 dark:text-zinc-100">{s.value}</span>
+            {s.label} <span className="font-medium text-[var(--text-primary)]">{s.value}</span>
           </span>
         ))}
       </div>

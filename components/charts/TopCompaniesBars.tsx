@@ -20,7 +20,7 @@ export function TopCompaniesBars({ companies }: { companies: CompanyBar[] }) {
   const max = Math.max(1, ...companies.map((c) => c.count));
 
   if (companies.length === 0) {
-    return <p className="text-sm text-zinc-400 dark:text-zinc-500">No experiences yet.</p>;
+    return <p className="text-sm text-[var(--text-secondary)]">No experiences yet.</p>;
   }
 
   return (
@@ -36,17 +36,17 @@ export function TopCompaniesBars({ companies }: { companies: CompanyBar[] }) {
             onFocus={() => setHovered(c.id)}
             onBlur={() => setHovered(null)}
             className={`flex items-center gap-3 rounded-lg px-2 py-1.5 transition-colors ${
-              hovered === c.id ? "bg-zinc-50 dark:bg-zinc-800/60" : ""
+              hovered === c.id ? "bg-[var(--surface-muted)]" : ""
             }`}
           >
-            <span className="w-24 shrink-0 truncate text-sm text-zinc-600 dark:text-zinc-400">{c.name}</span>
+            <span className="w-24 shrink-0 truncate text-sm text-[var(--text-secondary)]">{c.name}</span>
             <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-[var(--viz-grid)]">
               <span
                 className="block h-full rounded-full transition-all"
                 style={{ width: `${pct}%`, backgroundColor: "var(--viz-series-blue)" }}
               />
             </span>
-            <span className="w-6 shrink-0 text-right text-sm font-semibold text-zinc-900 dark:text-zinc-100">{c.count}</span>
+            <span className="w-6 shrink-0 text-right text-sm font-semibold text-[var(--text-primary)]">{c.count}</span>
           </Link>
         );
       })}

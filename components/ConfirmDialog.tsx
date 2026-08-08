@@ -48,7 +48,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
           onClick={() => close(false)}
         >
           <div
-            className="w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-5 shadow-xl dark:border-zinc-800 dark:bg-zinc-900"
+            className="w-full max-w-sm rounded-2xl border border-[var(--border-default)] bg-[var(--surface-card)] p-5 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start gap-3">
@@ -58,9 +58,9 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                 </span>
               )}
               <div>
-                <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">{state.title}</h2>
+                <h2 className="font-semibold text-[var(--text-primary)]">{state.title}</h2>
                 {state.description && (
-                  <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{state.description}</p>
+                  <p className="mt-1 text-sm text-[var(--text-secondary)]">{state.description}</p>
                 )}
               </div>
             </div>

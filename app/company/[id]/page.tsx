@@ -42,16 +42,16 @@ export default async function CompanyPage({ params }: PageProps) {
           <BuildingIcon width={26} height={26} />
         </span>
         <div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">{company.name}</h1>
-          {company.industry && <p className="text-zinc-500 dark:text-zinc-400">{company.industry}</p>}
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">{company.name}</h1>
+          {company.industry && <p className="text-[var(--text-secondary)]">{company.industry}</p>}
         </div>
       </div>
 
       <section className="flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">Experiences</h2>
+          <h2 className="text-lg font-semibold text-[var(--text-primary)]">Experiences</h2>
           <div className="flex items-center gap-3 text-sm">
-            <Link href={`/experiences?company=${id}`} className="flex items-center gap-1 text-zinc-500 hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400">
+            <Link href={`/experiences?company=${id}`} className="flex items-center gap-1 text-[var(--text-secondary)] hover:text-indigo-600 dark:hover:text-indigo-400">
               Filter these <ArrowRightIcon width={13} height={13} />
             </Link>
             <Link href={`/submit-experience?company=${encodeURIComponent(company.name)}`} className={button.secondary}>
@@ -73,9 +73,9 @@ export default async function CompanyPage({ params }: PageProps) {
 
       <section className="flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">Resources</h2>
+          <h2 className="text-lg font-semibold text-[var(--text-primary)]">Resources</h2>
           <div className="flex items-center gap-3 text-sm">
-            <Link href={`/resources?company=${id}`} className="flex items-center gap-1 text-zinc-500 hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400">
+            <Link href={`/resources?company=${id}`} className="flex items-center gap-1 text-[var(--text-secondary)] hover:text-indigo-600 dark:hover:text-indigo-400">
               Filter these <ArrowRightIcon width={13} height={13} />
             </Link>
             <Link href={`/submit-resource?company=${encodeURIComponent(company.name)}`} className={button.secondary}>

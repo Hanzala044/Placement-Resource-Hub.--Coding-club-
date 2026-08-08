@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { resourceCreateSchema } from "@/lib/validators";
-import { errorResponse, resolveCompanyId, resourceSort, zodErrorResponse } from "@/lib/db";
+import { errorResponse, parseMulti, resolveCompanyId, resourceSort, zodErrorResponse } from "@/lib/db";
 
 // GET /api/resources?company=&tag=&type=&search=&status=open&sort=newest|oldest
+// company/type accept comma-separated values (multi-select filter bar).
 export async function GET(req: NextRequest) {
   const params = req.nextUrl.searchParams;
-  const company = params.get("company");
+  const company = parseMulti(params.get("company"));
   const tag = params.get("tag");
-  const type = params.get("type");
+  const type = parseMulti(params.get("type"));
   const search = params.get("search")?.trim();
   const status = params.get("status") ?? "open";
   const { column, ascending } = resourceSort(params.get("sort"));
@@ -20,8 +21,8 @@ export async function GET(req: NextRequest) {
     .limit(100);
 
   if (status !== "all") query = query.eq("status", status);
-  if (company) query = query.eq("company_id", company);
-  if (type) query = query.eq("resource_type", type);
+  if (company.length > 0) query = query.in("company_id", company);
+  if (type.length > 0) query = query.in("resource_type", type);
   if (tag) query = query.contains("tags", [tag]);
   if (search) {
     const like = `%${search}%`;

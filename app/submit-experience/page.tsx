@@ -16,8 +16,8 @@ export default async function SubmitExperiencePage({ searchParams }: PageProps) 
           <FileTextIcon width={20} height={20} />
         </span>
         <div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Share an interview experience</h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Share an interview experience</h1>
+          <p className="text-sm text-[var(--text-secondary)]">
             Help the next batch of juniors — the more specific, the more useful.
           </p>
         </div>

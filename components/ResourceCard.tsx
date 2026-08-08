@@ -17,12 +17,12 @@ export function ResourceCard({ resource }: { resource: Resource }) {
             href={resource.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 font-semibold text-zinc-900 hover:text-indigo-600 dark:text-zinc-50 dark:hover:text-indigo-400"
+            className="flex items-center gap-1.5 font-semibold text-[var(--text-primary)] hover:text-indigo-600 dark:hover:text-indigo-400"
           >
             {resource.title}
             <LinkIcon width={13} height={13} className="opacity-50" />
           </a>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="text-sm text-[var(--text-secondary)]">
             {resource.companies?.name ?? "General"}
           </p>
         </div>
@@ -40,7 +40,7 @@ export function ResourceCard({ resource }: { resource: Resource }) {
         </div>
       )}
 
-      <div className="mt-auto flex items-center gap-1 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+      <div className="mt-auto flex items-center gap-1 border-t border-[var(--border-default)] pt-3">
         <Link href={`/resource/${resource.id}/edit`} className={button.ghost}>
           <PencilIcon width={14} height={14} />
           Edit

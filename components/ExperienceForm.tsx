@@ -28,7 +28,21 @@ export function ExperienceForm({ mode, experience, defaultCompanyName }: Experie
   const [level, setLevel] = useState(experience?.experience_level ?? "fresher");
   const [difficulty, setDifficulty] = useState(experience?.difficulty ?? "medium");
   const [outcome, setOutcome] = useState(experience?.outcome ?? "pending");
-  const [rounds, setRounds] = useState(experience?.rounds ?? "");
+  
+  // Parse rounds if it's JSON, otherwise fall back to raw string in round1
+  const initialRounds = (() => {
+    try {
+      if (experience?.rounds && experience.rounds.startsWith("{")) {
+        return JSON.parse(experience.rounds);
+      }
+    } catch (e) {}
+    return { round1: experience?.rounds ?? "", round2: "", round3: "" };
+  })();
+
+  const [round1, setRound1] = useState(initialRounds.round1);
+  const [round2, setRound2] = useState(initialRounds.round2);
+  const [round3, setRound3] = useState(initialRounds.round3);
+
   const [content, setContent] = useState(experience?.content ?? "");
   const [tags, setTags] = useState(experience?.tags.join(", ") ?? "");
   const [authorName, setAuthorName] = useState(experience?.author_name ?? "");
@@ -40,10 +54,12 @@ export function ExperienceForm({ mode, experience, defaultCompanyName }: Experie
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
 
+    const combinedRounds = JSON.stringify({ round1, round2, round3 });
+
     const payload =
       mode === "create"
-        ? { company_name: companyName, role, experience_level: level, difficulty, outcome, rounds, content, tags, author_name: authorName }
-        : { role, experience_level: level, difficulty, outcome, rounds, content, tags, author_name: authorName, status };
+        ? { company_name: companyName, role, experience_level: level, difficulty, outcome, rounds: combinedRounds, content, tags, author_name: authorName }
+        : { role, experience_level: level, difficulty, outcome, rounds: combinedRounds, content, tags, author_name: authorName, status };
 
     const schema = mode === "create" ? experienceCreateSchema : experienceUpdateSchema;
     const parsed = schema.safeParse(payload);
@@ -99,7 +115,7 @@ export function ExperienceForm({ mode, experience, defaultCompanyName }: Experie
               placeholder="e.g. Acme Corp"
             />
           ) : (
-            <p className="mt-1 rounded-lg bg-zinc-100 px-3 py-2 text-sm text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+            <p className="mt-1 rounded-lg bg-[var(--surface-muted)] px-3 py-2 text-sm text-[var(--text-secondary)]">
               {experience?.companies?.name} (not editable)
             </p>
           )}
@@ -206,17 +222,43 @@ export function ExperienceForm({ mode, experience, defaultCompanyName }: Experie
         </div>
       </div>
 
-      <div>
-        <label className={labelClass} htmlFor="rounds">
-          Rounds
-        </label>
-        <textarea
-          id="rounds"
-          className={`${input} mt-1 min-h-[100px]`}
-          value={rounds}
-          onChange={(e) => setRounds(e.target.value)}
-          placeholder={"Round 1: Online Assessment — DSA, 90 min\nRound 2: Technical — trees, OS basics\nRound 3: HR"}
-        />
+      <div className="flex flex-col gap-4">
+        <div>
+          <label className={labelClass} htmlFor="round1">
+            Round 1: Online Assessment
+          </label>
+          <textarea
+            id="round1"
+            className={`${input} mt-1 min-h-[80px]`}
+            value={round1}
+            onChange={(e) => setRound1(e.target.value)}
+            placeholder="Topics covered, difficulty, duration..."
+          />
+        </div>
+        <div>
+          <label className={labelClass} htmlFor="round2">
+            Round 2: Technical Interview
+          </label>
+          <textarea
+            id="round2"
+            className={`${input} mt-1 min-h-[80px]`}
+            value={round2}
+            onChange={(e) => setRound2(e.target.value)}
+            placeholder="Specific coding problems, DSA topics, core CS subjects like DBMS/OS..."
+          />
+        </div>
+        <div>
+          <label className={labelClass} htmlFor="round3">
+            Round 3: HR & Behavioral
+          </label>
+          <textarea
+            id="round3"
+            className={`${input} mt-1 min-h-[80px]`}
+            value={round3}
+            onChange={(e) => setRound3(e.target.value)}
+            placeholder="Common questions asked, your responses, behavioral scenarios..."
+          />
+        </div>
         {fieldError("rounds")}
       </div>
 

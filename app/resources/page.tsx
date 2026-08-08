@@ -6,7 +6,7 @@ import { ResourceCard } from "@/components/ResourceCard";
 import { EmptyState } from "@/components/EmptyState";
 import { PlusIcon, LinkIcon } from "@/components/icons";
 import { button, surface } from "@/lib/ui";
-import { resourceSort } from "@/lib/db";
+import { parseMulti, resourceSort } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -22,8 +22,8 @@ export default async function ResourcesPage({ searchParams }: PageProps) {
   };
 
   const status = get("status") ?? "open";
-  const company = get("company");
-  const type = get("type");
+  const company = parseMulti(get("company") ?? null);
+  const type = parseMulti(get("type") ?? null);
   const tag = get("tag");
   const search = get("search");
   const { column, ascending } = resourceSort(get("sort") ?? null);
@@ -35,8 +35,8 @@ export default async function ResourcesPage({ searchParams }: PageProps) {
     .limit(100);
 
   if (status !== "all") query = query.eq("status", status);
-  if (company) query = query.eq("company_id", company);
-  if (type) query = query.eq("resource_type", type);
+  if (company.length > 0) query = query.in("company_id", company);
+  if (type.length > 0) query = query.in("resource_type", type);
   if (tag) query = query.contains("tags", [tag]);
   if (search) {
     const like = `%${search}%`;
@@ -56,8 +56,8 @@ export default async function ResourcesPage({ searchParams }: PageProps) {
             <LinkIcon width={20} height={20} />
           </span>
           <div>
-            <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Prep Resources</h1>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <h1 className="text-2xl font-bold text-[var(--text-primary)]">Prep Resources</h1>
+            <p className="text-sm text-[var(--text-secondary)]">
               {resources?.length ?? 0} result{resources?.length === 1 ? "" : "s"}
             </p>
           </div>

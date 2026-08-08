@@ -125,13 +125,13 @@ export default async function DashboardPage() {
 
       <section className="grid gap-4 lg:grid-cols-3">
         <div className={`p-5 lg:col-span-2 ${card}`}>
-          <h2 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Submissions, last {TREND_DAYS} days</h2>
+          <h2 className="text-sm font-semibold text-[var(--text-primary)]">Submissions, last {TREND_DAYS} days</h2>
           <div className="mt-4">
             <TrendAreaChart data={trendData} />
           </div>
         </div>
         <div className={`p-5 ${card}`}>
-          <h2 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Outcomes</h2>
+          <h2 className="text-sm font-semibold text-[var(--text-primary)]">Outcomes</h2>
           <div className="mt-4">
             <OutcomeStackedBar selected={outcomeCounts.selected} pending={outcomeCounts.pending} rejected={outcomeCounts.rejected} />
           </div>
@@ -140,7 +140,7 @@ export default async function DashboardPage() {
 
       <section className="grid gap-4 lg:grid-cols-3">
         <div className="flex flex-col gap-2 lg:col-span-2">
-          <h2 className="px-1 text-sm font-semibold text-zinc-700 dark:text-zinc-300">Recent experiences</h2>
+          <h2 className="px-1 text-sm font-semibold text-[var(--text-primary)]">Recent experiences</h2>
           {recent && recent.length > 0 ? (
             <RecentExperiencesTable experiences={recent as Experience[]} totalCount={totalExperiences} />
           ) : (
@@ -148,7 +148,7 @@ export default async function DashboardPage() {
           )}
         </div>
         <div className={`p-5 ${card}`}>
-          <h2 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Top companies</h2>
+          <h2 className="text-sm font-semibold text-[var(--text-primary)]">Top companies</h2>
           <div className="mt-4">
             <TopCompaniesBars companies={topCompanies} />
           </div>
@@ -157,8 +157,8 @@ export default async function DashboardPage() {
 
       <section className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">Browse by company</h2>
-          <Link href="/experiences" className="text-sm text-zinc-500 hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400">
+          <h2 className="text-lg font-semibold text-[var(--text-primary)]">Browse by company</h2>
+          <Link href="/experiences" className="text-sm text-[var(--text-secondary)] hover:text-indigo-600 dark:hover:text-indigo-400">
             Browse all experiences →
           </Link>
         </div>

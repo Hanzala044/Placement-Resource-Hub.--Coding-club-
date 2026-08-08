@@ -70,7 +70,7 @@ export function HelpfulButton({ experienceId, initialCount }: { experienceId: st
       className={`inline-flex w-full items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all active:scale-[0.97] disabled:pointer-events-none ${
         voted
           ? "border-indigo-200 bg-indigo-50 text-indigo-700 dark:border-indigo-900/50 dark:bg-indigo-950/40 dark:text-indigo-300"
-          : "border-zinc-300 bg-white text-zinc-600 hover:border-indigo-300 hover:text-indigo-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-indigo-800 dark:hover:text-indigo-400"
+          : "border-[var(--border-default)] bg-[var(--surface-card)] text-[var(--text-secondary)] hover:border-indigo-300 hover:text-indigo-600 dark:hover:border-indigo-800 dark:hover:text-indigo-400"
       }`}
     >
       <ThumbsUpIcon width={15} height={15} className={voted ? "fill-indigo-100 dark:fill-indigo-900" : ""} />

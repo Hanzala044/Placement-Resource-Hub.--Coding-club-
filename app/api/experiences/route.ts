@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { experienceCreateSchema } from "@/lib/validators";
-import { errorResponse, experienceSort, resolveCompanyId, zodErrorResponse } from "@/lib/db";
+import { errorResponse, experienceSort, parseMulti, resolveCompanyId, zodErrorResponse } from "@/lib/db";
 
 // GET /api/experiences?company=&tag=&difficulty=&outcome=&level=&search=&status=open&sort=newest|oldest|helpful
+// company/difficulty/outcome/level accept comma-separated values (multi-select filter bar).
 export async function GET(req: NextRequest) {
   const params = req.nextUrl.searchParams;
-  const company = params.get("company");
+  const company = parseMulti(params.get("company"));
   const tag = params.get("tag");
-  const difficulty = params.get("difficulty");
-  const outcome = params.get("outcome");
-  const level = params.get("level");
+  const difficulty = parseMulti(params.get("difficulty"));
+  const outcome = parseMulti(params.get("outcome"));
+  const level = parseMulti(params.get("level"));
   const search = params.get("search")?.trim();
   const status = params.get("status") ?? "open";
   const { column, ascending } = experienceSort(params.get("sort"));
@@ -22,10 +23,10 @@ export async function GET(req: NextRequest) {
     .limit(100);
 
   if (status !== "all") query = query.eq("status", status);
-  if (company) query = query.eq("company_id", company);
-  if (difficulty) query = query.eq("difficulty", difficulty);
-  if (outcome) query = query.eq("outcome", outcome);
-  if (level) query = query.eq("experience_level", level);
+  if (company.length > 0) query = query.in("company_id", company);
+  if (difficulty.length > 0) query = query.in("difficulty", difficulty);
+  if (outcome.length > 0) query = query.in("outcome", outcome);
+  if (level.length > 0) query = query.in("experience_level", level);
   if (tag) query = query.contains("tags", [tag]);
   if (search) {
     const like = `%${search}%`;

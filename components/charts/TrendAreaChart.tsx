@@ -23,7 +23,7 @@ export function TrendAreaChart({ data }: { data: TrendPoint[] }) {
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
   if (data.length === 0) {
-    return <p className="text-sm text-zinc-400 dark:text-zinc-500">Not enough data yet.</p>;
+    return <p className="text-sm text-[var(--text-secondary)]">Not enough data yet.</p>;
   }
 
   const max = Math.max(1, ...data.map((d) => d.value));
@@ -98,11 +98,11 @@ export function TrendAreaChart({ data }: { data: TrendPoint[] }) {
 
       {hovered && (
         <div
-          className="pointer-events-none absolute -translate-x-1/2 -translate-y-full rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 text-xs shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
+          className="pointer-events-none absolute -translate-x-1/2 -translate-y-full rounded-lg border border-[var(--border-default)] bg-[var(--surface-card)] px-2.5 py-1.5 text-xs shadow-lg"
           style={{ left: `${(hovered.x / WIDTH) * 100}%`, top: `${(hovered.y / HEIGHT) * 100}%` }}
         >
-          <p className="font-semibold text-zinc-900 dark:text-zinc-50">{hovered.value}</p>
-          <p className="text-zinc-500 dark:text-zinc-400">{hovered.label}</p>
+          <p className="font-semibold text-[var(--text-primary)]">{hovered.value}</p>
+          <p className="text-[var(--text-secondary)]">{hovered.label}</p>
         </div>
       )}
     </div>

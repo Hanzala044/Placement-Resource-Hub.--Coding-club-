@@ -25,7 +25,7 @@ export function useToast() {
 const KIND_STYLE: Record<ToastKind, string> = {
   success: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900/50 dark:bg-emerald-950/60 dark:text-emerald-200",
   error: "border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-900/50 dark:bg-rose-950/60 dark:text-rose-200",
-  info: "border-zinc-200 bg-white text-zinc-800 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100",
+  info: "border-[var(--border-default)] bg-[var(--surface-card)] text-[var(--text-primary)]",
 };
 
 export function ToastProvider({ children }: { children: ReactNode }) {

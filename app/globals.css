@@ -78,10 +78,25 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 ::selection {
   background: rgb(99 102 241 / 0.25);
+}
+
+/* Beautiful dynamic background for the whole page */
+.animated-bg {
+  position: fixed;
+  inset: -50%;
+  z-index: -1;
+  background-image: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.03) 0%, transparent 60%);
+  animation: rotate-bg 60s linear infinite;
+  pointer-events: none;
+}
+@keyframes rotate-bg {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 @keyframes toast-in {

@@ -24,8 +24,8 @@ export function StatTile({ label, value, icon: Icon, tone = "indigo", delta }: S
         <Icon width={18} height={18} />
       </span>
       <div className="min-w-0">
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">{label}</p>
-        <p className="text-2xl font-bold leading-tight text-zinc-900 dark:text-zinc-50">{value}</p>
+        <p className="text-sm text-[var(--text-secondary)]">{label}</p>
+        <p className="text-2xl font-bold leading-tight text-[var(--text-primary)]">{value}</p>
         {delta && <p className="mt-0.5 text-xs text-emerald-600 dark:text-emerald-400">{delta}</p>}
       </div>
     </div>

@@ -1,5 +1,5 @@
 const TONES = {
-  neutral: "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300",
+  neutral: "bg-[var(--surface-muted)] text-[var(--text-primary)]",
   blue: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
   green: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
   red: "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300",
@@ -68,7 +68,7 @@ export function TypeBadge({ value }: { value: string }) {
 
 export function TagChip({ tag, href }: { tag: string; href?: string }) {
   const className =
-    "inline-flex items-center rounded-full border border-zinc-200 dark:border-zinc-700 px-2.5 py-0.5 text-xs text-zinc-600 dark:text-zinc-400 hover:border-indigo-300 hover:text-indigo-600 dark:hover:border-indigo-800 dark:hover:text-indigo-400 transition-colors";
+    "inline-flex items-center rounded-full border border-[var(--border-default)] px-2.5 py-0.5 text-xs text-[var(--text-secondary)] hover:border-indigo-300 hover:text-indigo-600 dark:hover:border-indigo-800 dark:hover:text-indigo-400 transition-colors";
   if (href) {
     return (
       <a href={href} className={className}>
