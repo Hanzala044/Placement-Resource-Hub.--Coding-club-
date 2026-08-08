@@ -1,4 +1,4 @@
-import { SparklesIcon } from "@/components/icons";
+import Image from "next/image";
 
 /**
  * Single source of truth for the brand mark, used in the sidebar and
@@ -8,8 +8,14 @@ import { SparklesIcon } from "@/components/icons";
  */
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <span className={`flex size-8 shrink-0 items-center justify-center rounded-lg bg-indigo-600 text-white shadow-sm shadow-indigo-600/30 ${className}`}>
-      <SparklesIcon width={16} height={16} />
-    </span>
+    <div className={`flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white shadow-sm shadow-black/5 ${className}`}>
+      <Image 
+        src="/logo.png" 
+        alt="Logo" 
+        width={32} 
+        height={32} 
+        className="h-full w-full object-contain p-1" 
+      />
+    </div>
   );
 }
