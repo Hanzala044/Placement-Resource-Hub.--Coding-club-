@@ -300,6 +300,33 @@ export default function AnimatedGradient({
 
     startTimeRef.current = performance.now();
 
+    // Resolving a `var(--x)` color reads getComputedStyle(), which forces a
+    // style recalc — cheap once, expensive at 60fps forever. Resolve on
+    // mount and whenever the theme could plausibly have changed (the
+    // data-theme attribute flips, or the OS light/dark preference changes),
+    // not on every animation frame.
+    let resolvedColors: [number, number, number, number][] = [
+      hexToRgba(params.color1),
+      hexToRgba(params.color2),
+      hexToRgba(params.color3),
+    ];
+    const usesCssVars = [params.color1, params.color2, params.color3].some((c) => c.startsWith("var("));
+
+    let themeObserver: MutationObserver | undefined;
+    let darkModeQuery: MediaQueryList | undefined;
+    let onSchemeChange: (() => void) | undefined;
+
+    if (usesCssVars) {
+      const refreshColors = () => {
+        resolvedColors = [hexToRgba(params.color1), hexToRgba(params.color2), hexToRgba(params.color3)];
+      };
+      themeObserver = new MutationObserver(refreshColors);
+      themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+      darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      onSchemeChange = refreshColors;
+      darkModeQuery.addEventListener("change", onSchemeChange);
+    }
+
     const animate = (time: number) => {
       const elapsed = (time - startTimeRef.current) / 1000;
       const speed = (params.speed / 100) * 5;
@@ -310,9 +337,7 @@ export default function AnimatedGradient({
       gl.uniform1f(uniforms.u_scale, params.scale);
       gl.uniform1f(uniforms.u_rotation, (params.rotation * Math.PI) / 180);
 
-      const c1 = hexToRgba(params.color1);
-      const c2 = hexToRgba(params.color2);
-      const c3 = hexToRgba(params.color3);
+      const [c1, c2, c3] = resolvedColors;
       gl.uniform4f(uniforms.u_color1, c1[0], c1[1], c1[2], c1[3]);
       gl.uniform4f(uniforms.u_color2, c2[0], c2[1], c2[2], c2[3]);
       gl.uniform4f(uniforms.u_color3, c3[0], c3[1], c3[2], c3[3]);
@@ -339,6 +364,8 @@ export default function AnimatedGradient({
         cancelAnimationFrame(frameIdRef.current);
       }
       resizeObserver.disconnect();
+      themeObserver?.disconnect();
+      if (darkModeQuery && onSchemeChange) darkModeQuery.removeEventListener("change", onSchemeChange);
       gl.deleteProgram(program);
       gl.deleteShader(vertexShader);
       gl.deleteShader(fragmentShader);

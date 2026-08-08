@@ -127,7 +127,7 @@ export default async function ExperienceDetailPage({ params }: PageProps) {
         <div className={`flex flex-col gap-3 p-4 ${card}`}>
           <HelpfulButton experienceId={exp.id} initialCount={exp.helpful_count} />
           <ShareButton />
-          <PdfExportButton title={exp.role} rounds={exp.rounds} content={exp.content} author={exp.author_name!} />
+          <PdfExportButton title={exp.role} rounds={exp.rounds} content={exp.content} author={exp.author_name ?? ""} />
           <Link href={`/experience/${exp.id}/edit`} className={button.secondary}>
             <PencilIcon width={15} height={15} />
             Edit

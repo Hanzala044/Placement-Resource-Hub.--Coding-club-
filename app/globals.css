@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 /*
  * Semantic surface/text/border tokens. Every shared surface (cards, inputs,

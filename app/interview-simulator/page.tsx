@@ -5,6 +5,7 @@ import { useUser, SignInButton } from "@clerk/nextjs";
 import { card, button, input } from "@/lib/ui";
 import { SparklesIcon } from "@/components/icons";
 import ReactMarkdown from "react-markdown";
+import { useToast } from "@/components/Toast";
 
 interface Message {
   role: "user" | "model";
@@ -13,6 +14,7 @@ interface Message {
 
 export default function InterviewSimulatorPage() {
   const { isSignedIn, isLoaded } = useUser();
+  const { show } = useToast();
   const [context, setContext] = useState("");
   const [started, setStarted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -34,7 +36,7 @@ export default function InterviewSimulatorPage() {
     return (
       <div className="flex flex-col items-center justify-center p-10">
         <h1 className="mb-4 text-2xl font-bold text-[var(--text-primary)]">AI Interview Simulator</h1>
-        <p className="mb-6 text-[var(--text-secondary)]">Sign in to practice mock interviews with Gemini!</p>
+        <p className="mb-6 text-[var(--text-secondary)]">Sign in to practice mock interviews with an AI interviewer!</p>
         <SignInButton mode="modal">
           <button className={button.primary}>Sign In to Continue</button>
         </SignInButton>
@@ -61,7 +63,8 @@ export default function InterviewSimulatorPage() {
 
       setMessages([...newMessages, { role: "model", content: data.text }]);
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Failed to simulate interview");
+      show(err instanceof Error ? err.message : "Failed to simulate interview", "error");
+      setMessages(messages);
     } finally {
       setIsLoading(false);
     }

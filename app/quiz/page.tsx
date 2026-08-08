@@ -6,6 +6,7 @@ import { card, button, input } from "@/lib/ui";
 import { SparklesIcon } from "@/components/icons";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useToast } from "@/components/Toast";
 
 interface Question {
   question: string;
@@ -15,6 +16,7 @@ interface Question {
 
 export default function QuizPage() {
   const { isSignedIn, isLoaded } = useUser();
+  const { show } = useToast();
   const [topic, setTopic] = useState("");
   const [status, setStatus] = useState<"idle" | "generating" | "taking" | "completed">("idle");
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -52,7 +54,7 @@ export default function QuizPage() {
       setStatus("taking");
       setCurrentIndex(0);
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Failed to generate quiz");
+      show(err instanceof Error ? err.message : "Failed to generate quiz", "error");
       setStatus("idle");
     }
   }
@@ -75,12 +77,19 @@ export default function QuizPage() {
       setScore(calculatedScore);
       setStatus("completed");
 
-      // Save score
-      await fetch("/api/quiz/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, score: calculatedScore, total: questions.length }),
-      });
+      // Save score — quiz results still display either way, but the
+      // scoreboard/my-dashboard entry silently wouldn't exist without this
+      // check, so surface a toast if the save itself failed.
+      try {
+        const res = await fetch("/api/quiz/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ topic, score: calculatedScore, total: questions.length }),
+        });
+        if (!res.ok) throw new Error((await res.json().catch(() => null))?.error ?? "Failed to save score");
+      } catch (err) {
+        show(err instanceof Error ? err.message : "Failed to save your score", "error");
+      }
     }
   }
 
@@ -142,7 +151,7 @@ export default function QuizPage() {
           <motion.div key="generating" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={`flex flex-col items-center justify-center p-12 ${card}`}>
             <SparklesIcon width={32} height={32} className="mb-4 animate-spin text-indigo-500" />
             <h2 className="text-lg font-medium text-[var(--text-primary)]">Generating your quiz...</h2>
-            <p className="text-[var(--text-secondary)]">Gemini is writing 5 questions about &quot;{topic}&quot;</p>
+            <p className="text-[var(--text-secondary)]">AI is writing 5 questions about &quot;{topic}&quot;</p>
           </motion.div>
         )}
 

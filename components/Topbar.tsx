@@ -90,7 +90,10 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           </SignInButton>
         )}
         {isLoaded && isSignedIn && (
-          <UserButton afterSignOutUrl="/" />
+          // afterSignOutUrl was removed from UserButtonProps in Clerk v7 —
+          // configure the post-sign-out destination via ClerkProvider's
+          // signOutUrl (or the NEXT_PUBLIC_CLERK_* env vars) instead.
+          <UserButton />
         )}
       </div>
     </header>

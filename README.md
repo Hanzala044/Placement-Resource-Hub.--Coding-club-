@@ -58,7 +58,7 @@ Placement Resource Hub is a modern, student-driven platform designed to centrali
    ```
 
 4. **Database Setup:**
-   Run the SQL scripts located in `sql/migrations` in your Supabase SQL Editor to set up the required tables and schema.
+   In your Supabase SQL Editor, run `sql/schema.sql` first (creates `companies`, `experiences`, `resources`), then every file in `sql/migrations/` **in numeric order** — each one adds to tables the previous step created, so running only the migrations folder on a fresh project will fail.
 
 5. **Start the Development Server:**
    ```bash

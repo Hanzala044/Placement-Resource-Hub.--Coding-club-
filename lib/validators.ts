@@ -37,6 +37,33 @@ const optionalTrimmed = (max: number) =>
     .optional()
     .transform((v) => (v ? v : undefined));
 
+/**
+ * The rounds field: ExperienceForm now sends it as a JSON string
+ * `{round1, round2, round3}` (the structured Round 1/2/3 breakdown), with
+ * legacy rows still holding a plain free-text string. A bare `.min(1)`
+ * doesn't actually guard against an empty submission any more — a
+ * JSON-stringified object with three blank fields is still a non-empty
+ * *string*, e.g. `'{"round1":"","round2":"","round3":""}'`. This refines
+ * that check to require real content in at least one round (or the raw
+ * string, for the legacy/non-JSON case).
+ */
+const roundsField = z
+  .string()
+  .trim()
+  .min(1, "Describe at least one round")
+  .refine((val) => {
+    if (!val.startsWith("{")) return true; // legacy plain-text rounds
+    try {
+      const parsed = JSON.parse(val);
+      if (!parsed || typeof parsed !== "object") return true;
+      return [parsed.round1, parsed.round2, parsed.round3].some(
+        (r) => typeof r === "string" && r.trim().length > 0
+      );
+    } catch {
+      return true; // not actually JSON — the .min(1) above already covers it
+    }
+  }, "Describe at least one round");
+
 export const companySchema = z.object({
   name: z.string().trim().min(1, "Company name is required").max(200),
   industry: optionalTrimmed(200),
@@ -48,7 +75,7 @@ export const experienceCreateSchema = z.object({
   experience_level: z.enum(experienceLevels).default("fresher"),
   difficulty: z.enum(difficulties).default("medium"),
   outcome: z.enum(outcomes).default("pending"),
-  rounds: z.string().trim().min(1, "Describe at least one round"),
+  rounds: roundsField,
   content: z.string().trim().min(1, "Write-up is required"),
   tags: tagsField,
   author_name: optionalTrimmed(120),
@@ -61,7 +88,7 @@ export const experienceUpdateSchema = z
     experience_level: z.enum(experienceLevels),
     difficulty: z.enum(difficulties),
     outcome: z.enum(outcomes),
-    rounds: z.string().trim().min(1),
+    rounds: roundsField,
     content: z.string().trim().min(1),
     tags: tagsField,
     author_name: optionalTrimmed(120),

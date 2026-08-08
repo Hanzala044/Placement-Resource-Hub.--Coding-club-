@@ -42,6 +42,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           nothing is actually wrong with the render. It also covers the
           data-theme attribute the script above sets pre-hydration. */}
       <body suppressHydrationWarning className="min-h-full">
+        {/* Clerk v7 dropped the old afterSignOutUrl/signOutUrl provider
+            props — default sign-out behavior (return to the current page)
+            is fine here since no route requires auth. */}
         <ClerkProvider>
           <ToastProvider>
             <ConfirmProvider>
