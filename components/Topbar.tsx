@@ -30,7 +30,7 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   }
 
   return (
-    <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-[var(--border-default)] bg-[var(--surface-card)]/80 px-4 py-3 backdrop-blur-md sm:px-6">
+    <header className="relative z-30 flex items-center gap-3 border-b border-[var(--border-default)] bg-[var(--surface-card)]/80 px-4 py-3 backdrop-blur-md sm:px-6">
       <button type="button" onClick={onMenuClick} className="rounded-md p-2 text-[var(--text-secondary)] hover:bg-zinc-100 lg:hidden dark:hover:bg-zinc-800" aria-label="Open menu">
         <MenuIcon width={20} height={20} />
       </button>

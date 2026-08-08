@@ -51,7 +51,7 @@ export default async function ExperienceDetailPage({ params }: PageProps) {
     if (exp.rounds && exp.rounds.startsWith("{")) {
       parsedRounds = JSON.parse(exp.rounds);
     }
-  } catch (e) {
+  } catch {
     // leave parsedRounds as null to fallback to raw string
   }
 

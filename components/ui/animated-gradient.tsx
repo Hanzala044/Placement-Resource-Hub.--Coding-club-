@@ -384,11 +384,19 @@ export default function AnimatedGradient({
   );
 }
 
-function hexToRgba(hex: string): [number, number, number, number] {
+function hexToRgba(color: string): [number, number, number, number] {
   let r = 0,
     g = 0,
     b = 0,
     a = 1;
+
+  if (typeof window !== "undefined" && color.startsWith("var(")) {
+    const varName = color.slice(4, -1);
+    const computed = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    if (computed) color = computed;
+  }
+
+  const hex = color;
 
   if (hex.startsWith("rgba(")) {
     const parts = hex.slice(5, -1).split(",");

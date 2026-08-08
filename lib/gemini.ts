@@ -49,7 +49,7 @@ ${content}
   let response;
   try {
     response = await ai.chat.completions.create({
-      model: "google/gemma-4-31b-it:free", // Good free/cheap model on OpenRouter, or you can use "meta-llama/llama-3-8b-instruct:free"
+      model: "nvidia/nemotron-3-super-120b-a12b:free", // Good free/cheap model on OpenRouter, or you can use "meta-llama/llama-3-8b-instruct:free"
       messages: [{ role: "user", content: prompt }],
       response_format: { type: "json_object" },
     });
@@ -88,7 +88,7 @@ Respond with ONLY minified JSON (no markdown fences) exactly matching this shape
   let response;
   try {
     response = await ai.chat.completions.create({
-      model: "google/gemma-4-31b-it:free", 
+      model: "nvidia/nemotron-3-super-120b-a12b:free", 
       messages: [{ role: "user", content: prompt }],
       response_format: { type: "json_object" },
     });
@@ -127,7 +127,7 @@ Keep your responses concise and conversational (max 3-4 sentences).`;
 
   try {
     const response = await ai.chat.completions.create({
-      model: "google/gemma-4-31b-it:free",
+      model: "nvidia/nemotron-3-super-120b-a12b:free",
       messages: [
         { role: "system", content: systemInstruction },
         ...formattedMessages

@@ -35,7 +35,7 @@ export function ExperienceForm({ mode, experience, defaultCompanyName }: Experie
       if (experience?.rounds && experience.rounds.startsWith("{")) {
         return JSON.parse(experience.rounds);
       }
-    } catch (e) {}
+    } catch {}
     return { round1: experience?.rounds ?? "", round2: "", round3: "" };
   })();
 
