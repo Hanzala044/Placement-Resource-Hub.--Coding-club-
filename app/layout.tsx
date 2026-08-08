@@ -20,6 +20,11 @@ export const metadata: Metadata = {
   description: "Interview experiences and prep resources, shared by seniors for juniors.",
 };
 
+// Runs before React hydrates so a previously-chosen "cream" theme (see
+// ThemeToggle) applies immediately instead of flashing the default theme
+// first. Static, no user input involved — safe to inline.
+const THEME_INIT_SCRIPT = `try{if(localStorage.getItem('prh:theme')==='cream'){document.documentElement.setAttribute('data-theme','cream')}}catch(e){}`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -27,11 +32,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       {/* suppressHydrationWarning: some browser extensions (ad blockers, form
           fillers, etc.) inject attributes onto <html>/<body> before React
           hydrates, which React otherwise flags as a mismatch even though
-          nothing is actually wrong with the render. */}
-      <body suppressHydrationWarning className="min-h-full bg-zinc-50 dark:bg-black">
+          nothing is actually wrong with the render. It also covers the
+          data-theme attribute the script above sets pre-hydration. */}
+      <body suppressHydrationWarning className="min-h-full">
         <ToastProvider>
           <ConfirmProvider>
             <Shell>{children}</Shell>

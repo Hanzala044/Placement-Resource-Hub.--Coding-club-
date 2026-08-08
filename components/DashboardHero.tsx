@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, FileText, Target, Sparkles, Star, Building2 } from "lucide-react";
+import AnimatedGradient from "@/components/ui/animated-gradient";
 
 interface DashboardHeroProps {
   experienceCount: number;
@@ -39,7 +40,25 @@ export function DashboardHero({
 
   return (
     <div className="relative w-full overflow-hidden rounded-3xl bg-zinc-950 text-white">
-      <div className="hero-glow absolute inset-0" />
+      <AnimatedGradient
+        config={{
+          preset: "custom",
+          color1: "#050505",
+          color2: "#6366f1", // indigo-500 — matches the app's brand accent
+          color3: "#a855f7", // purple-500
+          rotation: -40,
+          proportion: 45,
+          scale: 0.5,
+          speed: 14,
+          distortion: 3,
+          swirl: 55,
+          swirlIterations: 10,
+          softness: 90,
+          shape: "Edge",
+          shapeSize: 40,
+        }}
+        noise={{ opacity: 6 }}
+      />
 
       <div className="relative z-10 px-6 py-14 sm:px-10 sm:py-16">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-8">

@@ -29,7 +29,7 @@ function NavSection({
 }) {
   return (
     <div>
-      <p className="px-3 text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-600">{title}</p>
+      <p className="px-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] opacity-70">{title}</p>
       <div className="mt-2 flex flex-col gap-0.5">
         {links.map((link) => {
           const active = "exact" in link && link.exact ? pathname === link.href : pathname.startsWith(link.href);
@@ -41,7 +41,7 @@ function NavSection({
               className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 active
                   ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-sm shadow-indigo-600/25"
-                  : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                  : "text-[var(--text-secondary)] hover:bg-zinc-100 dark:hover:bg-zinc-800"
               }`}
             >
               <link.icon width={17} height={17} />
@@ -63,16 +63,16 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
         <div className="fixed inset-0 z-40 bg-black/40 lg:hidden" onClick={onClose} aria-hidden />
       )}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-64 shrink-0 flex-col border-r border-zinc-200 bg-white transition-transform duration-200 ease-in-out lg:static lg:translate-x-0 dark:border-zinc-800 dark:bg-zinc-950 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 shrink-0 flex-col border-r border-[var(--border-default)] bg-[var(--surface-card)] transition-transform duration-200 ease-in-out lg:static lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between px-4 py-4">
-          <Link href="/" className="flex items-center gap-2 font-semibold text-zinc-900 dark:text-zinc-50">
+          <Link href="/" className="flex items-center gap-2 font-semibold text-[var(--text-primary)]">
             <Logo />
             Placement Hub
           </Link>
-          <button type="button" onClick={onClose} className="rounded-md p-1.5 text-zinc-500 hover:bg-zinc-100 lg:hidden dark:hover:bg-zinc-800" aria-label="Close menu">
+          <button type="button" onClick={onClose} className="rounded-md p-1.5 text-[var(--text-secondary)] hover:bg-zinc-100 lg:hidden dark:hover:bg-zinc-800" aria-label="Close menu">
             <XIcon width={18} height={18} />
           </button>
         </div>

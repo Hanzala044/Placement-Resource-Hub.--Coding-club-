@@ -1,8 +1,24 @@
 @import "tailwindcss";
 
+/*
+ * Semantic surface/text/border tokens. Every shared surface (cards, inputs,
+ * the sidebar/topbar chrome, the page background) reads these instead of a
+ * hardcoded zinc-* shade, via Tailwind arbitrary values like
+ * `bg-[var(--surface-card)]`. That's what lets a single attribute —
+ * `data-theme` on <html> — reskin the whole app in one place (light/dark
+ * follow the OS by default; "cream" is an explicit user override that wins
+ * over both, via ThemeToggle). One-off accent/status colors (buttons,
+ * badges) intentionally stay off this system — see Badge.tsx / lib/ui.ts.
+ */
 :root {
   --background: #fafafa;
   --foreground: #18181b;
+  --surface-page: #fafafa;
+  --surface-card: #ffffff;
+  --surface-muted: #fafafa;
+  --border-default: #e4e4e7; /* zinc-200 */
+  --text-primary: #18181b; /* zinc-900 */
+  --text-secondary: #71717a; /* zinc-500 */
 }
 
 @theme inline {
@@ -13,17 +29,47 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="cream"]) {
     --background: #000000;
     --foreground: #f4f4f5;
+    --surface-page: #000000;
+    --surface-card: #18181b; /* zinc-900 */
+    --surface-muted: #27272a; /* zinc-800 */
+    --border-default: #27272a; /* zinc-800 */
+    --text-primary: #fafafa;
+    --text-secondary: #a1a1aa; /* zinc-400 */
   }
+}
+:root[data-theme="dark"] {
+  --background: #000000;
+  --foreground: #f4f4f5;
+  --surface-page: #000000;
+  --surface-card: #18181b;
+  --surface-muted: #27272a;
+  --border-default: #27272a;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+}
+
+/* Cream theme — an explicit user choice (see ThemeToggle), wins over the
+   OS dark preference too, the same way a manual dark toggle would. */
+:root[data-theme="cream"] {
+  color-scheme: light;
+  --background: #f7f1e3;
+  --foreground: #3a2f1d;
+  --surface-page: #f7f1e3;
+  --surface-card: #fffaf3;
+  --surface-muted: #f0e6d2;
+  --border-default: #e2d3b3;
+  --text-primary: #3a2f1d;
+  --text-secondary: #7a6b4f;
 }
 
 * {
   scrollbar-color: rgb(212 212 216) transparent;
 }
 @media (prefers-color-scheme: dark) {
-  * {
+  :root:not([data-theme="cream"]) * {
     scrollbar-color: rgb(63 63 70) transparent;
   }
 }
@@ -36,16 +82,6 @@ body {
 
 ::selection {
   background: rgb(99 102 241 / 0.25);
-}
-
-/* Radial-gradient hero backdrop, used behind the dashboard hero section. */
-.hero-glow {
-  background-image: radial-gradient(circle at 50% 0%, rgb(99 102 241 / 0.12), transparent 60%);
-}
-@media (prefers-color-scheme: dark) {
-  .hero-glow {
-    background-image: radial-gradient(circle at 50% 0%, rgb(99 102 241 / 0.18), transparent 60%);
-  }
 }
 
 @keyframes toast-in {
@@ -111,6 +147,16 @@ body {
   --viz-grid: #2c2c2a;
   --viz-baseline: #383835;
   --viz-series-blue: #3987e5;
+}
+:root[data-theme="cream"] .viz-root {
+  color-scheme: light;
+  --viz-surface: #fffaf3;
+  --viz-text-primary: #3a2f1d;
+  --viz-text-secondary: #7a6b4f;
+  --viz-muted: #9c8c6a;
+  --viz-grid: #ecdfc0;
+  --viz-baseline: #d8c69a;
+  --viz-series-blue: #2a78d6;
 }
 
 @keyframes marquee {
